@@ -38,3 +38,4 @@ Crud operations implemented:
 2. Make sure that Maven script has been detected or else add manually
 3. Make a users_db in mysqlworkbench connection on port 3306
    (you can run the code: `CREATE DATABASE users_db;`)
+4. The port in 8080 and the endpoint is api/users 
