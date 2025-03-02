@@ -37,4 +37,4 @@ Crud operations implemented:
 1. Clone the entire repository and open in intellij ide
 2. Make sure that Maven script has been detected or else add manually
 3. Make a users_db in mysqlworkbench connection on port 3306
-   (you run the code: `CREATE DATABASE users_db;`)
+   (you can run the code: `CREATE DATABASE users_db;`)
