@@ -1,7 +1,9 @@
 package com.example.BookingService.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,8 +18,13 @@ public class Booking {
     private int seats;
     private BigDecimal totalAmount;
 
-    @Transient // Prevents Hibernate from persisting this field in DB
+    @Transient // Not persisted in DB; used only for request payloads
     private List<Long> seatIds;
+
+    // Bidirectional one-to-many relationship with BookingDetail
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<BookingDetail> bookingDetails = new ArrayList<>();
 
     // Constructors
     public Booking() {}
@@ -73,5 +80,24 @@ public class Booking {
 
     public void setSeatIds(List<Long> seatIds) {
         this.seatIds = seatIds;
+    }
+
+    public List<BookingDetail> getBookingDetails() {
+        return bookingDetails;
+    }
+
+    public void setBookingDetails(List<BookingDetail> bookingDetails) {
+        this.bookingDetails = bookingDetails;
+    }
+
+    // Helper methods to manage bidirectional relationship
+    public void addBookingDetail(BookingDetail detail) {
+        bookingDetails.add(detail);
+        detail.setBooking(this);
+    }
+
+    public void removeBookingDetail(BookingDetail detail) {
+        bookingDetails.remove(detail);
+        detail.setBooking(null);
     }
 }

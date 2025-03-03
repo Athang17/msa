@@ -3,7 +3,6 @@ package com.example.BookingService.service;
 import com.example.BookingService.entity.Booking;
 import com.example.BookingService.entity.BookingDetail;
 import com.example.BookingService.repository.BookingRepository;
-import com.example.BookingService.repository.BookingDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,6 @@ public class BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
-    @Autowired
-    private BookingDetailRepository bookingDetailRepository;
-
     private static final BigDecimal PRICE_PER_TICKET = new BigDecimal(100);
 
     public Booking createBooking(Long userId, Long showtimeId, List<Long> seatIds) {
@@ -30,13 +26,16 @@ public class BookingService {
         BigDecimal totalAmount = PRICE_PER_TICKET.multiply(BigDecimal.valueOf(seatIds.size()));
 
         Booking booking = new Booking(userId, showtimeId, seatIds.size(), totalAmount, seatIds);
-        booking = bookingRepository.save(booking);
-
+        // Add BookingDetail entries via helper method
         for (Long seatId : seatIds) {
-            BookingDetail bookingDetail = new BookingDetail(booking, seatId, PRICE_PER_TICKET);
-            bookingDetailRepository.save(bookingDetail);
+            BookingDetail detail = new BookingDetail();
+            detail.setSeatId(seatId);
+            detail.setPrice(PRICE_PER_TICKET);
+            booking.addBookingDetail(detail);
         }
 
+        // Cascade persist will handle saving BookingDetail objects
+        booking = bookingRepository.save(booking);
         return booking;
     }
 
