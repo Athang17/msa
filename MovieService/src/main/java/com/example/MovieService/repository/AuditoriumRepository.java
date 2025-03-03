@@ -1,4 +1,9 @@
 package com.example.MovieService.repository;
 
-public class AuditoriumRepository {
+import com.example.MovieService.entity.Auditorium;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AuditoriumRepository extends JpaRepository<Auditorium, Long> {
 }

@@ -33,11 +33,6 @@ public class MovieService {
             movie.setDuration(movieDetails.getDuration());
             movie.setReleaseDate(movieDetails.getReleaseDate());
             movie.setLanguage(movieDetails.getLanguage());
-            movie.setTheater(movieDetails.getTheater());
-            movie.setAuditorium(movieDetails.getAuditorium());
-
-            movie.setShowtimes(movieDetails.getShowtimes());
-
             return movieRepository.save(movie);
         }).orElseThrow(() -> new RuntimeException("Movie not found with id: " + id));
     }
