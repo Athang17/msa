@@ -32,7 +32,6 @@ public class BookingService {
             throw new IllegalArgumentException("Seat IDs cannot be null or empty.");
         }
 
-        // Verify showtime exists and has available seats
         Map<String, Object> showtime = restTemplate.getForObject(
                 MOVIE_SERVICE_URL + "/showtimes/" + showtimeId,
                 Map.class);
@@ -46,7 +45,6 @@ public class BookingService {
             throw new RuntimeException("Not enough available seats for this showtime");
         }
 
-        // Verify user exists
         Map<String, Object> user = restTemplate.getForObject(
                 USER_SERVICE_URL + "/" + userId,
                 Map.class);
@@ -58,7 +56,6 @@ public class BookingService {
         BigDecimal totalAmount = PRICE_PER_TICKET.multiply(BigDecimal.valueOf(seatIds.size()));
 
         Booking booking = new Booking(userId, showtimeId, seatIds.size(), totalAmount, seatIds);
-        // Add BookingDetail entries via helper method
         for (Long seatId : seatIds) {
             BookingDetail detail = new BookingDetail();
             detail.setSeatId(seatId);
@@ -66,21 +63,17 @@ public class BookingService {
             booking.addBookingDetail(detail);
         }
 
-        // Save booking
         booking = bookingRepository.save(booking);
 
-        // Update available seats in showtime
         Map<String, Integer> updateSeats = new HashMap<>();
         updateSeats.put("available_seats", availableSeats - seatIds.size());
         restTemplate.put(MOVIE_SERVICE_URL + "/showtimes/" + showtimeId + "/seats", updateSeats);
 
-        // Create payment request
         Map<String, Object> paymentRequest = new HashMap<>();
         paymentRequest.put("bookingId", booking.getId());
         paymentRequest.put("paymentMethod", "CARD"); // Default payment method
         paymentRequest.put("amount", totalAmount.doubleValue());
 
-        // Call payment service to initialize payment
         restTemplate.postForObject(PAYMENT_SERVICE_URL + "/create", paymentRequest, Map.class);
 
         return booking;
@@ -99,15 +92,12 @@ public class BookingService {
         if (booking.isPresent()) {
             Booking bookingData = booking.get();
 
-            // Call payment service to cancel any pending payments
             try {
                 restTemplate.delete(PAYMENT_SERVICE_URL + "/booking/" + bookingId);
             } catch (Exception e) {
-                // Log error but continue with deletion
                 System.err.println("Error cancelling payment: " + e.getMessage());
             }
 
-            // Free up the seats in the showtime
             try {
                 Map<String, Object> showtime = restTemplate.getForObject(
                         MOVIE_SERVICE_URL + "/showtimes/" + bookingData.getShowtimeId(),
@@ -121,7 +111,6 @@ public class BookingService {
                             updateSeats);
                 }
             } catch (Exception e) {
-                // Log error but continue with deletion
                 System.err.println("Error updating showtime: " + e.getMessage());
             }
         }

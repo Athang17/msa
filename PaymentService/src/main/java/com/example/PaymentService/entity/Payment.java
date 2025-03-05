@@ -24,7 +24,7 @@ public class Payment {
     private String transactionId;
 
     @Column(nullable = false)
-    private String paymentStatus; // "PENDING", "SUCCESS", "FAILED"
+    private String paymentStatus;
 
     @Column(updatable = false)
     private LocalDateTime paymentTime = LocalDateTime.now();

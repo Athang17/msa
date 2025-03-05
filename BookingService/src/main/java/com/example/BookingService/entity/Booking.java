@@ -87,7 +87,6 @@ public class Booking {
         this.bookingDetails = bookingDetails;
     }
 
-    // Helper methods to manage bidirectional relationship
     public void addBookingDetail(BookingDetail detail) {
         bookingDetails.add(detail);
         detail.setBooking(this);

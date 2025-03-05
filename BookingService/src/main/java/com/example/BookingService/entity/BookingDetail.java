@@ -23,7 +23,6 @@ public class BookingDetail {
     @Column(nullable = false)
     private BigDecimal price;
 
-    // Constructors
     public BookingDetail() {}
 
     public BookingDetail(Booking booking, Long seatId, BigDecimal price) {
@@ -32,7 +31,6 @@ public class BookingDetail {
         this.price = price;
     }
 
-    // Getters & Setters
     public Long getBookingDetailId() {
         return bookingDetailId;
     }

@@ -11,7 +11,7 @@ public class Showtime {
     private Long showtimeId;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id") // This is the foreign key column in showtimes table
+    @JoinColumn(name = "movie_id")
     private Movie movie;
 
     @Column(name = "show_date")
@@ -26,7 +26,6 @@ public class Showtime {
     @Column(name = "available_seats")
     private int available_seats;
 
-    // Getters and setters
     public Long getShowtimeId() {
         return showtimeId;
     }
