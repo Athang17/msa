@@ -18,15 +18,13 @@ public class Booking {
     private int seats;
     private BigDecimal totalAmount;
 
-    @Transient // Not persisted in DB; used only for request payloads
+    @Transient
     private List<Long> seatIds;
 
-    // Bidirectional one-to-many relationship with BookingDetail
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<BookingDetail> bookingDetails = new ArrayList<>();
 
-    // Constructors
     public Booking() {}
 
     public Booking(Long userId, Long showtimeId, int seats, BigDecimal totalAmount, List<Long> seatIds) {
@@ -37,7 +35,6 @@ public class Booking {
         this.seatIds = seatIds;
     }
 
-    // Getters & Setters
     public Long getId() {
         return id;
     }

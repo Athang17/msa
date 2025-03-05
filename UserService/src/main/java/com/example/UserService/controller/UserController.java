@@ -33,6 +33,12 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/validate/{id}")
+    public ResponseEntity<Boolean> validateUser(@PathVariable Long id) {
+        boolean exists = userService.getUserById(id).isPresent();
+        return ResponseEntity.ok(exists);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         try {

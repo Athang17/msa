@@ -39,6 +39,13 @@ public class ShowtimeService {
         }).orElseThrow(() -> new RuntimeException("Showtime not found with id: " + id));
     }
 
+    public Showtime updateAvailableSeats(Long id, Integer availableSeats) {
+        return showtimeRepository.findById(id).map(showtime -> {
+            showtime.setAvailable_seats(availableSeats);
+            return showtimeRepository.save(showtime);
+        }).orElseThrow(() -> new RuntimeException("Showtime not found with id: " + id));
+    }
+
     public void deleteShowtime(Long id) {
         showtimeRepository.deleteById(id);
     }

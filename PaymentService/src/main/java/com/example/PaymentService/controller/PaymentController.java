@@ -21,8 +21,7 @@ public class PaymentController {
         Payment payment = paymentService.createPayment(
                 paymentRequest.getBookingId(),
                 paymentRequest.getPaymentMethod(),
-                paymentRequest.getAmount()
-        );
+                paymentRequest.getAmount());
         return ResponseEntity.ok(payment);
     }
 
@@ -35,6 +34,12 @@ public class PaymentController {
     public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
         Optional<Payment> payment = paymentService.getPaymentById(id);
         return payment.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/booking/{bookingId}")
+    public ResponseEntity<List<Payment>> getPaymentsByBookingId(@PathVariable Long bookingId) {
+        List<Payment> payments = paymentService.getPaymentsByBookingId(bookingId);
+        return ResponseEntity.ok(payments);
     }
 
     @GetMapping("/transaction/{transactionId}")
@@ -56,6 +61,12 @@ public class PaymentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
         paymentService.deletePayment(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/booking/{bookingId}")
+    public ResponseEntity<Void> deletePaymentsByBookingId(@PathVariable Long bookingId) {
+        paymentService.deletePaymentsByBookingId(bookingId);
         return ResponseEntity.noContent().build();
     }
 }
