@@ -21,9 +21,10 @@ public class BookingService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    private static final String MOVIE_SERVICE_URL = "http://localhost:8080/api";
-    private static final String USER_SERVICE_URL = "http://localhost:8083/api/users";
-    private static final String PAYMENT_SERVICE_URL = "http://localhost:8082/api/payments";
+    private static final String API_GATEWAY_URL = "http://localhost:9090/api";
+    private static final String MOVIE_SERVICE_URL = API_GATEWAY_URL + "/movies";
+    private static final String USER_SERVICE_URL = API_GATEWAY_URL + "/users";
+    private static final String PAYMENT_SERVICE_URL = API_GATEWAY_URL + "/payments";
 
     private static final BigDecimal PRICE_PER_TICKET = new BigDecimal(100);
 
@@ -80,7 +81,13 @@ public class BookingService {
     }
 
     public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+        try {
+            List<Booking> bookings = bookingRepository.findAll();
+            return bookings;
+        } catch (Exception e) {
+            System.err.println("Error retrieving bookings: " + e.getMessage());
+            throw e;
+        }
     }
 
     public Optional<Booking> getBookingById(Long bookingId) {

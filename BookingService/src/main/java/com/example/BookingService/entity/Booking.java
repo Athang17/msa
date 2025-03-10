@@ -7,15 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "booking")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "showtime_id")
     private Long showtimeId;
+
+    @Column(name = "seats")
     private int seats;
+
+    @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
     @Transient

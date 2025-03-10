@@ -19,7 +19,8 @@ public class BookingController {
     private BookingService bookingService;
 
     private final RestTemplate restTemplate = new RestTemplate();
-    private static final String PAYMENT_SERVICE_URL = "http://localhost:8082/api/payments";
+    private static final String API_GATEWAY_URL = "http://localhost:9090/api";
+    private static final String PAYMENT_SERVICE_URL = API_GATEWAY_URL + "/payments";
 
     @PostMapping("/create")
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
