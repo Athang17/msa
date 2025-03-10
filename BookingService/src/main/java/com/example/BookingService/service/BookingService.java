@@ -23,7 +23,7 @@ public class BookingService {
     private RestTemplate restTemplate;
 
     private static final String API_GATEWAY_URL = "http://APIGateway/api";
-    private static final String MOVIE_SERVICE_URL = API_GATEWAY_URL + "/movies";
+    private static final String MOVIE_SERVICE_URL = API_GATEWAY_URL;
     private static final String USER_SERVICE_URL = API_GATEWAY_URL + "/users";
     private static final String PAYMENT_SERVICE_URL = API_GATEWAY_URL + "/payments";
 
