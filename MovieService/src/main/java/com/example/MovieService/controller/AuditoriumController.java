@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/auditoriums")
+@RequestMapping("/api/auditoriums")
 public class AuditoriumController {
     @Autowired
     private AuditoriumService auditoriumService;

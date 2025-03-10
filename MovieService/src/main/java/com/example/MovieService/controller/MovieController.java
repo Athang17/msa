@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping("api/movies")
+@RequestMapping("/api/movies")
 public class MovieController {
 
     @Autowired

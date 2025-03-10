@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/showtimes")
+@RequestMapping("/api/showtimes")
 public class ShowtimeController {
 
     @Autowired
