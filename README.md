@@ -159,3 +159,7 @@ Entities in the Movie Microservice:
 3. Create a `movie_db` in MySQL Workbench on port 3306.
    (You can run the command: `CREATE DATABASE movie_db;`)
 4. The application runs on port **8081**, and the base endpoint is **api/movies**.
+
+### Eureka dashboard:
+
+![img_1.png](img_1.png)
