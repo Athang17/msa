@@ -1,0 +1,144 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: ./EurekaServer
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - msa-network
+
+  movie-service:
+    build:
+      context: ./MovieService
+    container_name: movie-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql-movie
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-movie:3306/movie_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - msa-network
+
+  booking-service:
+    build:
+      context: ./BookingService
+    container_name: booking-service
+    ports:
+      - "8181:8081"
+    depends_on:
+      - mysql-booking
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-booking:3306/booking_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - msa-network
+
+  user-service:
+    build:
+      context: ./UserService
+    container_name: user-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - mysql-user
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-user:3306/user_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - msa-network
+
+  payment-service:
+    build:
+      context: ./PaymentService
+    container_name: payment-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql-payment
+      - eureka-server
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-payment:3306/payment_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - msa-network
+
+  api-gateway:
+    build:
+      context: ./APIGateway
+    container_name: api-gateway
+    ports:
+      - "9090:9090"
+    depends_on:
+      - eureka-server
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    networks:
+      - msa-network
+
+  mysql-movie:
+    image: mysql:8.0
+    container_name: mysql-movie
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: movie_db
+    ports:
+      - "3311:3306"
+    networks:
+      - msa-network
+
+  mysql-booking:
+    image: mysql:8.0
+    container_name: mysql-booking
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: booking_db
+    ports:
+      - "3308:3306"
+    networks:
+      - msa-network
+
+  mysql-user:
+    image: mysql:8.0
+    container_name: mysql-user
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: user_db
+    ports:
+      - "3309:3306"
+    networks:
+      - msa-network
+
+  mysql-payment:
+    image: mysql:8.0
+    container_name: mysql-payment
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: payment_db
+    ports:
+      - "3310:3306"
+    networks:
+      - msa-network
+
+networks:
+  msa-network:
+    driver: bridge
